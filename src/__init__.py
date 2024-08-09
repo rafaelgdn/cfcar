@@ -118,17 +118,16 @@ async def handle_page_request(url, encoded_vin, driver):
     retries = 0
 
     if "has been blocked" in text:
+        print("IP has been blocked")
         await renew_proxy()
+        return
+
+    if 'id="cf-please-wait"' in text:
+        print("Captcha reloaded")
+        await handle_captcha_reload(url, encoded_vin, driver)
+        return
 
     while 'data-key="year_of_manufacture"' not in text and retries < 10:
-        if retries > 2:
-            captcha_reloaded = await driver.find_elements(By.ID, "cf-please-wait")
-
-            if captcha_reloaded:
-                print("Captcha reloaded")
-                await handle_captcha_reload(url, encoded_vin, driver)
-                return
-
         print("Retrying...")
         retries += 1
         await driver.sleep(0.5)
