@@ -1,5 +1,5 @@
 from selenium_driverless import webdriver
-from selenium.webdriver.common.by import By
+from selenium_driverless.types.by import By
 from bs4 import BeautifulSoup
 from urllib.parse import quote
 import asyncio
@@ -37,7 +37,7 @@ async def bypass_captcha(driver):
     await pointer.move_to(200, 205, smooth_soft=60, total_time=0.5)
 
     shadow_root = await driver.execute_script("""
-        return document.querySelector("#qquD4");
+        return document.querySelector("#challenge-form");
     """)
 
     location = await shadow_root.location
